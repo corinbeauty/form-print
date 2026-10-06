@@ -179,7 +179,7 @@
         .basic-info-row { height: 6%; }
         .basic-info-input { width: 100%; height: 100%; text-align: center; font-size: 18px;}
 
-        .date-type-row { height: 20%; }
+        .date-type-row { height: 18%; }
         .date-section {
             display: flex;
             flex-direction: column;
@@ -204,15 +204,15 @@
             cursor: pointer;
         }
 
-        /* 將說明區高度大幅壓縮 */
-        .desc-row { height: 10%; }
+        /* 將說明區高度大幅壓縮為 12% (大約兩三行的空間) */
+        .desc-row { height: 12%; }
         .desc-textarea {
             width: 100%;
             height: 100%;
             display: block;
             resize: none;
             padding: 8px 10px;
-            font-size: 20px;
+            font-size: 16px; /* 字體微調，適合較小空間 */
             line-height: 1.5;
             background-color: transparent;
             text-align: left;
@@ -221,7 +221,7 @@
             outline: none;
         }
 
-        .doc-row { height: 20%; }
+        .doc-row { height: 18%; }
         .doc-group {
             display: flex;
             flex-direction: column;
@@ -242,15 +242,49 @@
             font-size: 18px;
         }
 
-        /* 將簽名區高度大幅擴增 */
-        .signature-row { height: 37%; }
-        /* 簽名區輸入框 */
-        .sig-input { 
-            width: 100%; 
-            height: 100%; 
-            text-align: center; 
-            font-size: 72px; /* 字體放大 3 倍 */
+        /* 簽名區行高設定為 30% (大幅增加) */
+        .signature-row { height: 30%; }
+        /* 內部簽名框高度佔滿 */
+        .sig-box-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        .sig-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #000;
+        }
+        .sig-box:last-child {
+            border-right: none;
+        }
+        .sig-title {
+            text-align: center;
             font-weight: bold;
+            border-bottom: 1px solid #000;
+            padding: 8px 0;
+            background-color: rgba(0,0,0,0.03); /* 微微加深標題背景區隔 */
+        }
+        .sig-content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .sig-input { 
+            width: 90%; 
+            height: 90%; 
+            text-align: center; 
+            font-size: 36px;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+        }
+        .sig-input:focus {
+            border-bottom: 1px dashed #333;
+            outline: none;
         }
 
         .form-id {
@@ -266,6 +300,7 @@
             .a4-paper { box-shadow: none; padding: 0; margin: 0; }
             input[type="text"], textarea { background-color: transparent !important; border: none !important;}
             .input-underline { border-bottom: 1px solid #000 !important; }
+            .sig-input:focus { border-bottom: none; }
         }
 
     </style>
@@ -403,23 +438,27 @@
                     </td>
                 </tr>
 
-                <!-- 6. 簽名區 (高度已大幅擴增) -->
+                <!-- 6. 簽名區 (高度已重新分配並大幅擴增) -->
                 <tr class="signature-row">
-                    <td colspan="6" style="padding: 0;">
-                        <table style="width: 100%; height: 100%; border-collapse: collapse; border: none; margin: 0;">
-                            <tr style="height: 15%;">
-                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-left: none;">店長</td>
-                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">總監</td>
-                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">副處長</td>
-                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-right: none;">處長</td>
-                            </tr>
-                            <tr style="height: 85%;">
-                                <td style="padding: 0; border-bottom: none; border-left: none;"><input type="text" class="sig-input"></td>
-                                <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
-                                <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
-                                <td style="padding: 0; border-bottom: none; border-right: none;"><input type="text" class="sig-input"></td>
-                            </tr>
-                        </table>
+                    <td colspan="6" style="padding: 0; height: 100%;">
+                        <div class="sig-box-container">
+                            <div class="sig-box">
+                                <div class="sig-title">店長</div>
+                                <div class="sig-content"><input type="text" class="sig-input"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="sig-title">總監</div>
+                                <div class="sig-content"><input type="text" class="sig-input"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="sig-title">副處長</div>
+                                <div class="sig-content"><input type="text" class="sig-input"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="sig-title">處長</div>
+                                <div class="sig-content"><input type="text" class="sig-input"></div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
