@@ -3,313 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>手舞足道休閒餐旅事業集團 - 員工長假申請單</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>手舞足道員工長假申請單</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap');
-        
+        /* 基本重置與字型設定 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: "微軟正黑體", "Noto Sans TC", sans-serif;
-            background-color: #525659; /* 模擬 PDF 檢視器的深灰色背景 */
+            font-family: "微軟正黑體", "Microsoft JhengHei", sans-serif;
+            background-color: #525659; /* 模擬 PDF 或圖片瀏覽器的深色背景 */
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
+            align-items: center;
             min-height: 100vh;
-            margin: 0;
+            padding: 20px;
         }
 
-        /* 嚴格的 A4 尺寸設定 */
+        /* A4 紙張設定 (210mm x 297mm) */
         .a4-paper {
+            background-color: #fff;
             width: 210mm;
-            height: 297mm; /* 標準 A4 高度 */
-            background-color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            padding: 15mm 15mm 15mm 15mm; /* 預留適當的邊界 */
-            box-sizing: border-box;
+            height: 297mm;
+            padding: 15mm; /* 留出版面邊界 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow: hidden; /* 防止浮水印超出邊界 */
         }
 
-        table {
-            width: 100%;
-            flex-grow: 1; /* 讓表格填滿 A4 剩餘的垂直空間 */
-            border-collapse: collapse;
-            border: 2px solid black;
-            table-layout: fixed;
+        /* 浮水印設定 */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; /* 浮水印大小 */
+            opacity: 0.15; /* 透明度設定 */
+            pointer-events: none; /* 確保不會阻擋滑鼠點擊輸入框 */
+            z-index: 0;
         }
 
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            vertical-align: middle;
-            font-size: 16px;
+        /* 表頭區域 (Logo + 標題) */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 5px;
+            z-index: 1;
+        }
+        .header img {
+            position: absolute;
+            left: 0;
+            top: -10px;
+            height: 60px; /* Logo 尺寸 */
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .header h2 {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 5px;
         }
 
-        .text-center { text-align: center; }
-        .font-bold { font-weight: bold; }
-        
-        /* 隱形輸入框樣式 (包含單行與多行) */
-        input[type="text"], textarea {
-            font-family: inherit;
-            font-size: inherit;
-            background: transparent;
-            outline: none;
-            border: none;
+        /* 單位與日期選擇區塊 */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            z-index: 1;
         }
-
-        /* 編輯模式下的底線提示 */
-        body:not(.print-mode) .inline-input {
-            border-bottom: 1px dashed #94a3b8;
-            background-color: #f8fafc;
+        .business-group {
+            display: flex;
+            gap: 15px;
         }
-        body:not(.print-mode) .inline-input:focus {
-            background-color: #eff6ff;
-            border-bottom: 1px solid #3b82f6;
-        }
-
-        /* 針對長篇文字的區域 */
-        .textarea-full {
-            width: 100%;
-            height: 100%;
-            resize: none;
-            box-sizing: border-box;
-            padding: 8px;
-        }
-        body:not(.print-mode) .textarea-full {
-            background-color: #f8fafc;
-        }
-
-        /* 絕對置中用容器 */
-        .flex-center {
+        .business-group label {
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        .date-input {
+            display: flex;
+            align-items: baseline;
+        }
+        
+        /* 通用輸入框與核取方塊樣式 */
+        input[type="text"], textarea {
+            font-family: inherit;
+            font-size: 16px;
+            border: none; /* 預設隱藏邊框，像實體紙張 */
+            background-color: rgba(240, 248, 255, 0.3); /* 微微的底色提示可輸入 */
+            outline: none;
+        }
+        input[type="text"]:focus, textarea:focus {
+            background-color: rgba(230, 240, 255, 0.8);
+            border-bottom: 1px dashed #333; /* 點擊時顯示底線 */
+        }
+        
+        /* 特殊樣式：底部有底線的輸入框 */
+        .input-underline {
+            border-bottom: 1px solid #000 !important;
+            border-radius: 0;
+            background-color: transparent !important;
+            text-align: center;
+        }
+        .input-underline:focus {
+             border-bottom: 2px solid #000 !important;
         }
 
-        /* 核取方塊美化 */
         input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            margin-right: 3px;
+            cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border: 1px solid black;
+            border: 1px solid #000;
             position: relative;
-            cursor: pointer;
-            background-color: white;
-            flex-shrink: 0;
-            margin-right: 8px;
-            transform: translateY(2px);
         }
         input[type="checkbox"]:checked::after {
             content: "✔";
             position: absolute;
-            top: -5px;
-            left: 2px;
-            font-size: 18px;
+            top: -4px;
+            left: 1px;
+            font-size: 14px;
             color: black;
             font-weight: bold;
         }
 
-        .controls {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
+        /* 表格主體 */
+        table {
+            width: 100%;
+            flex-grow: 1; /* 表格自動填滿剩餘高度 */
+            border-collapse: collapse;
+            border: 2px solid #000;
+            table-layout: fixed;
+            z-index: 1;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            vertical-align: middle;
+            font-size: 16px;
+        }
+        .text-center { text-align: center; font-weight: bold; }
+        
+        /* 表格內部佈局工具 */
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+        .flex-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100%;
+            padding-left: 5px;
         }
 
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-            .a4-paper {
-                box-shadow: none;
-                width: 100%;
-                height: 100%;
-                padding: 0;
-                margin: 0;
-            }
-            .controls, .no-print {
-                display: none !important;
-            }
-            input[type="text"], textarea {
-                background-color: transparent !important;
-                border: none !important;
-            }
+        /* 針對特定欄位的微調 */
+        /* 第一列：基本資料 */
+        .basic-info-row { height: 6%; }
+        .basic-info-input { width: 100%; height: 100%; text-align: center; font-size: 18px;}
+
+        /* 第二列：日期與假別 */
+        .date-type-row { height: 20%; }
+        .date-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            padding-left: 10px;
+            font-size: 16px;
         }
+        .date-line {
+            display: flex;
+            align-items: baseline;
+        }
+        
+        .leave-type-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .leave-type-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* 第三列：說明 */
+        .desc-row { height: 35%; } /* 拉高說明區塊 */
+        .desc-textarea {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            padding: 5px;
+            font-size: 16px;
+            line-height: 1.5;
+            background-color: transparent;
+        }
+
+        /* 第四列：證明文件 */
+        .doc-row { height: 20%; }
+        .doc-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .doc-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* 第五列：審核結果 */
+        .result-row { height: 7%; }
+        .result-group {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* 第六列：簽名區 */
+        .sig-title-row { height: 4%; }
+        .sig-title-row th { width: 25%; }
+        .sig-input-row { height: 8%; }
+        .sig-input-row td { padding: 0; }
+        .sig-input { width: 100%; height: 100%; text-align: center; font-size: 24px; font-weight: bold;}
+
+        /* 右下角編號 */
+        .form-id {
+            text-align: right;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        /* 隱藏/截圖模式按鈕 */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .controls button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+        }
+        .controls button:hover { background-color: #0056b3; }
+
+        /* 列印/截圖模式專用 CSS */
+        @media print, (max-width: 0) /* 後者為強制觸發用，實務靠 class 切換 */ {
+            body { background-color: white; padding: 0; display: block; }
+            .a4-paper { box-shadow: none; padding: 0; margin: 0; }
+            .controls { display: none; }
+            input[type="text"], textarea { background-color: transparent !important; border: none !important;}
+            .input-underline { border-bottom: 1px solid #000 !important; }
+        }
+        .print-mode {
+             background-color: white; padding: 0;
+        }
+        .print-mode .a4-paper { box-shadow: none; margin: 0 auto;}
+        .print-mode input[type="text"], .print-mode textarea { background-color: transparent !important; }
+        .print-mode .input-underline:not(:focus) { border-bottom: 1px solid #000 !important; }
+
     </style>
 </head>
 <body>
 
-    <!-- 控制面板 -->
-    <div class="controls no-print">
-        <button onclick="togglePrintMode()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center gap-2 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-            </svg>
-            切換為截圖/列印模式
-        </button>
-    </div>
-
     <div class="a4-paper" id="paper-container">
         
-        <!-- 頁首與 Logo -->
-        <div class="relative flex flex-col items-center justify-center mb-6 h-[80px]">
-            <img src="手舞足道.png" alt="Logo" class="absolute left-0 top-0 h-16 object-contain" onerror="this.style.display='none'">
-            <h1 class="text-3xl font-bold tracking-widest mb-2 text-center w-full">手舞足道休閒餐旅事業集團</h1>
-            <h2 class="text-xl font-bold tracking-[0.2em] text-center w-full">員工長假申請單</h2>
+        <!-- 背景浮水印 -->
+        <img src="手舞足道.png" alt="watermark" class="watermark" onerror="this.style.display='none'">
+
+        <!-- 表頭 -->
+        <div class="header">
+            <img src="手舞足道.png" alt="Logo" onerror="this.style.display='none'">
+            <h1>手舞足道休閒餐旅事業集團</h1>
+            <h2>員工長假申請單</h2>
         </div>
 
-        <!-- 單位與日期區塊 (左右分散對齊) -->
-        <div class="flex justify-between items-end mb-2 text-[15px]">
-            <!-- 左側：事業群 -->
-            <div class="flex items-center gap-4">
-                <span class="font-bold">事業群：</span>
-                <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"><input type="checkbox">休閒美體事業群</label>
-                <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"><input type="checkbox">餐飲事業群</label>
-                <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"><input type="checkbox">健身事業群</label>
-                <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"><input type="checkbox">總管理處</label>
+        <!-- 單位與日期 -->
+        <div class="info-row">
+            <div class="business-group">
+                <span>事業群：</span>
+                <label><input type="checkbox"> 休閒美體事業群</label>
+                <label><input type="checkbox"> 餐飲事業群</label>
+                <label><input type="checkbox"> 健身事業群</label>
+                <label><input type="checkbox"> 總管理處</label>
             </div>
             
-            <!-- 右側：填寫日期 -->
-            <div class="flex items-center">
+            <div class="date-input">
                 <span>填寫日期：</span>
-                <input type="text" id="fill-year" class="inline-input w-10 text-center mx-1"> 年
-                <input type="text" id="fill-month" class="inline-input w-8 text-center mx-1"> 月
-                <input type="text" id="fill-day" class="inline-input w-8 text-center mx-1"> 日
+                <input type="text" id="fill-year" class="input-underline" style="width: 40px;"> 年
+                <input type="text" id="fill-month" class="input-underline" style="width: 30px;"> 月
+                <input type="text" id="fill-day" class="input-underline" style="width: 30px;"> 日
             </div>
         </div>
 
+        <!-- 表格主體 -->
         <table>
             <colgroup>
                 <col style="width: 12%;">
-                <col style="width: 21%;">
+                <col style="width: 21.33%;">
                 <col style="width: 12%;">
-                <col style="width: 21%;">
+                <col style="width: 21.33%;">
                 <col style="width: 12%;">
-                <col style="width: 22%;">
+                <col style="width: 21.34%;">
             </colgroup>
             <tbody>
                 <!-- 1. 基本資料 -->
-                <tr style="height: 6%;">
-                    <td class="text-center font-bold">申請單位</td>
-                    <td class="p-0"><div class="flex-center"><input type="text" class="w-full h-full text-center inline-input"></div></td>
-                    <td class="text-center font-bold">職稱</td>
-                    <td class="p-0"><div class="flex-center"><input type="text" class="w-full h-full text-center inline-input"></div></td>
-                    <td class="text-center font-bold">員工姓名</td>
-                    <td class="p-0"><div class="flex-center"><input type="text" class="w-full h-full text-center inline-input"></div></td>
+                <tr class="basic-info-row">
+                    <td class="text-center">申請單位</td>
+                    <td style="padding:0;"><input type="text" class="basic-info-input"></td>
+                    <td class="text-center">職稱</td>
+                    <td style="padding:0;"><input type="text" class="basic-info-input"></td>
+                    <td class="text-center">員工姓名</td>
+                    <td style="padding:0;"><input type="text" class="basic-info-input"></td>
                 </tr>
 
-                <tr style="height: 22%;">
-                    <td class="text-center font-bold">請假日期</td>
-                    <td colspan="3" class="p-6">
-                        <!-- 圖檔樣式的請假日期格式 -->
-                        <div class="flex flex-col justify-center h-full space-y-6 text-lg pl-4 text-left">
-                            <div class="flex items-center">
-                                <span class="mr-3">自</span>
-                                <input type="text" class="w-16 text-center inline-input text-blue-800"> <span class="mx-2">年</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800"> <span class="mx-2">月</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800"> <span class="mx-2">日</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800 ml-4"> <span class="mx-2">時</span>
+                <!-- 2. 日期與假別 -->
+                <tr class="date-type-row">
+                    <td class="text-center">請假日期</td>
+                    <td colspan="3">
+                        <div class="date-section">
+                            <div class="date-line">
+                                <span style="margin-right: 5px;">自</span>
+                                <input type="text" class="input-underline" style="width: 40px; margin: 0 5px;"> 年
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 月
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 日
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 時
                             </div>
-                            <div class="flex items-center">
-                                <span class="mr-3">至</span>
-                                <input type="text" class="w-16 text-center inline-input text-blue-800"> <span class="mx-2">年</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800"> <span class="mx-2">月</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800"> <span class="mx-2">日</span>
-                                <input type="text" class="w-12 text-center inline-input text-blue-800 ml-4"> <span class="mx-2">時</span>
+                            <div class="date-line">
+                                <span style="margin-right: 5px;">至</span>
+                                <input type="text" class="input-underline" style="width: 40px; margin: 0 5px;"> 年
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 月
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 日
+                                <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 時
                             </div>
-                            <div class="flex items-center mt-6 ml-6">
-                                <span class="mr-2">共計 (</span>
-                                <input type="text" class="w-20 text-center inline-input text-blue-800">
-                                <span class="ml-2">) 天</span>
+                            <div class="date-line" style="margin-top: 15px; margin-left: 20px;">
+                                <span>共計 (</span>
+                                <input type="text" style="width: 60px; text-align: center; border-bottom: 1px dashed #999;">
+                                <span>) 天</span>
                             </div>
                         </div>
                     </td>
-                    <td class="text-center font-bold">假別</td>
-                    <td class="p-4 align-top">
-                        <div class="flex flex-col gap-2 h-full justify-center">
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">事假</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">病假/公傷病假</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">特休/補休</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">婚假</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">產假</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">喪假</label>
-                            <div class="flex items-center p-1 w-full">
-                                <input type="checkbox">其他
-                                <input type="text" class="inline-input ml-2 flex-grow">
+                    <td class="text-center">假別</td>
+                    <td>
+                        <div class="flex-left leave-type-group">
+                            <label><input type="checkbox"> 事假</label>
+                            <label><input type="checkbox"> 病假/公傷病假</label>
+                            <label><input type="checkbox"> 特休/補休</label>
+                            <label><input type="checkbox"> 婚假</label>
+                            <label><input type="checkbox"> 產假</label>
+                            <label><input type="checkbox"> 喪假</label>
+                            <div style="display: flex; align-items: baseline;">
+                                <label style="margin-right: 5px;"><input type="checkbox"> 其他</label>
+                                <input type="text" class="input-underline" style="width: 80px;">
                             </div>
                         </div>
                     </td>
                 </tr>
 
-                <tr style="height: 32%;">
-                    <td class="text-center font-bold">請假事項<br>說明</td>
-                    <td colspan="5" class="p-0">
-                        <textarea class="textarea-full align-top text-left p-4 text-lg inline-input" placeholder="（請於此輸入詳細說明...）"></textarea>
+                <!-- 3. 說明 -->
+                <tr class="desc-row">
+                    <td class="text-center">請假事項<br>說明</td>
+                    <td colspan="5" style="padding: 0;">
+                        <textarea class="desc-textarea"></textarea>
                     </td>
                 </tr>
 
                 <!-- 4. 證明文件 -->
-                <tr style="height: 18%;">
-                    <td class="text-center font-bold">檢附證明文<br>件</td>
-                    <td colspan="5" class="p-4 pl-6 align-top">
-                        <div class="flex flex-col gap-3 h-full justify-center">
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">醫師診斷證明</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">已完成結婚登記之戶籍謄本</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">新生兒出生證明</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">訃文影本</label>
-                            <label class="flex items-center cursor-pointer hover:bg-gray-100 p-1 w-full"><input type="checkbox">護照、簽證影本或旅行社證明</label>
-                            <div class="flex items-center p-1 w-full max-w-md">
-                                <input type="checkbox">其他
-                                <input type="text" class="inline-input ml-2 flex-grow">
+                <tr class="doc-row">
+                    <td class="text-center">檢附證明文<br>件</td>
+                    <td colspan="5">
+                        <div class="flex-left doc-group">
+                            <label><input type="checkbox"> 醫師診斷證明</label>
+                            <label><input type="checkbox"> 已完成結婚登記之戶籍謄本</label>
+                            <label><input type="checkbox"> 新生兒出生證明</label>
+                            <label><input type="checkbox"> 訃文影本</label>
+                            <label><input type="checkbox"> 護照、簽證影本或旅行社證明</label>
+                            <div style="display: flex; align-items: baseline; width: 100%;">
+                                <label style="margin-right: 5px;"><input type="checkbox"> 其他</label>
+                                <input type="text" class="input-underline" style="flex-grow: 1; max-width: 300px; text-align: left; padding-left: 5px;">
                             </div>
                         </div>
                     </td>
                 </tr>
 
                 <!-- 5. 審核結果 -->
-                <tr style="height: 6%;">
-                    <td class="text-center font-bold">審核結果</td>
-                    <td colspan="5" class="p-0">
-                        <div class="flex-center gap-16">
-                            <label class="flex items-center cursor-pointer p-2 hover:bg-gray-100 text-lg"><input type="checkbox">通過</label>
-                            <label class="flex items-center cursor-pointer p-2 hover:bg-gray-100 text-lg"><input type="checkbox">不予通過</label>
+                <tr class="result-row">
+                    <td class="text-center">審核結果</td>
+                    <td colspan="5">
+                        <div class="result-group">
+                            <label style="cursor: pointer; display: flex; align-items: center;"><input type="checkbox"> 通過</label>
+                            <label style="cursor: pointer; display: flex; align-items: center;"><input type="checkbox"> 不予通過</label>
                         </div>
                     </td>
                 </tr>
 
-                <tr style="height: 4%;">
-                    <td colspan="2" class="text-center font-bold w-1/4">店長</td>
-                    <td colspan="2" class="text-center font-bold w-1/4">總監</td>
-                    <td class="text-center font-bold w-1/4">副處長</td>
-                    <td class="text-center font-bold w-1/4">處長</td>
+                <!-- 6. 簽名區 -->
+                <tr class="sig-title-row">
+                    <td class="text-center" colspan="2" style="width: 25%;">店長</td>
+                    <td class="text-center" colspan="2" style="width: 25%;">總監</td>
+                    <td class="text-center" style="width: 25%;">副處長</td>
+                    <td class="text-center" style="width: 25%;">處長</td>
                 </tr>
-                <tr style="height: 12%;">
-                    <td colspan="2" class="p-0">
-                        <div class="flex-center"><input type="text" class="w-full h-full text-center text-2xl font-bold inline-input"></div>
-                    </td>
-                    <td colspan="2" class="p-0">
-                        <div class="flex-center"><input type="text" class="w-full h-full text-center text-2xl font-bold inline-input"></div>
-                    </td>
-                    <td class="p-0">
-                        <div class="flex-center"><input type="text" class="w-full h-full text-center text-2xl font-bold inline-input"></div>
-                    </td>
-                    <td class="p-0">
-                        <div class="flex-center"><input type="text" class="w-full h-full text-center text-2xl font-bold inline-input"></div>
-                    </td>
+                <tr class="sig-input-row">
+                    <td colspan="2"><input type="text" class="sig-input"></td>
+                    <td colspan="2"><input type="text" class="sig-input"></td>
+                    <td><input type="text" class="sig-input"></td>
+                    <td><input type="text" class="sig-input"></td>
                 </tr>
             </tbody>
         </table>
 
-        <!-- 表單編號右下角對齊 -->
-        <div class="text-right text-xs mt-2 font-mono text-gray-700 w-full">
-            HR-2022-11-16
-        </div>
+        <!-- 右下角編號 -->
+        <div class="form-id">HR-2022-11-16</div>
+    </div>
+
+    <!-- 控制按鈕 -->
+    <div class="controls no-print">
+        <button onclick="togglePrintMode()">
+            🖼️ 切換截圖/列印模式
+        </button>
     </div>
 
     <script>
@@ -323,17 +464,17 @@
             document.getElementById('fill-day').value = today.getDate();
         });
 
-        // 截圖/列印模式切換
+        // 截圖/列印模式切換 (隱藏輸入框底色)
         let isPrintMode = false;
         function togglePrintMode() {
             isPrintMode = !isPrintMode;
             if (isPrintMode) {
                 document.body.classList.add('print-mode');
-                // 進入模式後顯示提示
+                // 提示訊息
                 let notice = document.createElement('div');
                 notice.id = 'mode-notice';
-                notice.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: 30px; z-index: 9999; font-size: 16px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);';
-                notice.innerHTML = '✨ 已進入無痕截圖模式。<br>請直接使用截圖工具 (Win+Shift+S / Cmd+Shift+4) 或按 Ctrl+P 列印。<br><span style="color:#fbbf24; font-size:14px; margin-top:5px; display:block;">(點擊此浮窗即可還原編輯模式)</span>';
+                notice.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; font-size: 16px; cursor: pointer; text-align: center;';
+                notice.innerHTML = '已進入截圖模式<br><span style="font-size:12px; color:#ccc;">(點擊此框即可還原編輯模式)</span>';
                 notice.onclick = togglePrintMode;
                 document.body.appendChild(notice);
             } else {
