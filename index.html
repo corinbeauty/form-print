@@ -74,8 +74,7 @@
         /* 單位與日期選擇區塊 */
         .info-row {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            flex-direction: column; /* 改為垂直排列，讓日期掉到下方 */
             margin-bottom: 5px;
             font-size: 15px;
             font-weight: bold;
@@ -84,6 +83,7 @@
         .business-group {
             display: flex;
             gap: 15px;
+            align-items: center;
         }
         .business-group label {
             display: flex;
@@ -94,6 +94,8 @@
         .date-input {
             display: flex;
             align-items: baseline;
+            align-self: flex-end; /* 讓填寫日期靠右對齊 */
+            margin-top: 5px; /* 與上方事業群保持一點間距 */
         }
         
         /* 通用輸入框與核取方塊樣式 */
