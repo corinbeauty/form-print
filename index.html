@@ -204,11 +204,12 @@
             cursor: pointer;
         }
 
-        .desc-row { height: 35%; }
+        /* 將說明區高度從 35% 縮減至 25% */
+        .desc-row { height: 25%; }
         .desc-textarea {
             width: 100%;
             height: 100%;
-            min-height: 220px;
+            min-height: 150px;
             display: block;
             resize: none;
             padding: 8px 10px;
@@ -390,7 +391,7 @@
                     </td>
                 </tr>
 
-                <!-- 3. 說明 -->
+                <!-- 3. 說明 (高度已縮減) -->
                 <tr class="desc-row">
                     <td class="text-center">請假事項<br>說明</td>
                     <td colspan="5" style="padding: 0; vertical-align: top; height: 100%;">
@@ -427,17 +428,17 @@
                     </td>
                 </tr>
 
-                <!-- 6. 簽名區 (改用內部巢狀表格完全解決格線錯位問題) -->
+                <!-- 6. 簽名區 (高度已從 16% 擴展為 22%) -->
                 <tr>
-                    <td colspan="6" style="padding: 0; height: 16%;">
+                    <td colspan="6" style="padding: 0; height: 22%;">
                         <table style="width: 100%; height: 100%; border-collapse: collapse; border: none; margin: 0;">
-                            <tr style="height: 30%;">
+                            <tr style="height: 20%;">
                                 <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-left: none;">店長</td>
                                 <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">總監</td>
                                 <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">副處長</td>
                                 <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-right: none;">處長</td>
                             </tr>
-                            <tr style="height: 70%;">
+                            <tr style="height: 80%;">
                                 <td style="padding: 0; border-bottom: none; border-left: none;"><input type="text" class="sig-input"></td>
                                 <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
                                 <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
@@ -471,7 +472,7 @@
             document.getElementById('fill-day').value = today.getDate();
         });
 
-        // 截圖/列印模式切換 (已移除提示框)
+        // 截圖/列印模式切換
         let isPrintMode = false;
         function togglePrintMode() {
             isPrintMode = !isPrintMode;
