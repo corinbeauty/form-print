@@ -13,7 +13,7 @@
         }
         body {
             font-family: "微軟正黑體", "Microsoft JhengHei", sans-serif;
-            background-color: #525659; /* 模擬 PDF 或圖片瀏覽器的深色背景 */
+            background-color: #525659;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,12 +26,12 @@
             background-color: #fff;
             width: 210mm;
             height: 297mm;
-            padding: 15mm; /* 留出版面邊界 */
+            padding: 15mm;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             position: relative;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* 防止浮水印超出邊界 */
+            overflow: hidden;
         }
 
         /* 浮水印設定 */
@@ -40,13 +40,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 60%; /* 浮水印大小 */
-            opacity: 0.05; /* 透明度設定 (已調淡) */
-            pointer-events: none; /* 確保不會阻擋滑鼠點擊輸入框 */
+            width: 60%;
+            opacity: 0.05; /* 浮水印已調淡 */
+            pointer-events: none;
             z-index: 0;
         }
 
-        /* 表頭區域 (Logo + 標題) */
+        /* 表頭區域 */
         .header {
             position: relative;
             text-align: center;
@@ -57,7 +57,7 @@
             position: absolute;
             left: 0;
             top: -10px;
-            height: 60px; /* Logo 尺寸 */
+            height: 60px;
         }
         .header h1 {
             font-size: 26px;
@@ -74,7 +74,7 @@
         /* 單位與日期選擇區塊 */
         .info-row {
             display: flex;
-            flex-direction: column; /* 改為垂直排列，讓日期掉到下方 */
+            flex-direction: column;
             margin-bottom: 5px;
             font-size: 15px;
             font-weight: bold;
@@ -94,24 +94,23 @@
         .date-input {
             display: flex;
             align-items: baseline;
-            align-self: flex-end; /* 讓填寫日期靠右對齊 */
-            margin-top: 5px; /* 與上方事業群保持一點間距 */
+            align-self: flex-end;
+            margin-top: 5px;
         }
         
         /* 通用輸入框與核取方塊樣式 */
         input[type="text"], textarea {
             font-family: inherit;
             font-size: 16px;
-            border: none; /* 預設隱藏邊框，像實體紙張 */
-            background-color: rgba(240, 248, 255, 0.3); /* 微微的底色提示可輸入 */
+            border: none;
+            background-color: rgba(240, 248, 255, 0.3);
             outline: none;
         }
         input[type="text"]:focus, textarea:focus {
             background-color: rgba(230, 240, 255, 0.8);
-            border-bottom: 1px dashed #333; /* 點擊時顯示底線 */
+            border-bottom: 1px dashed #333;
         }
         
-        /* 特殊樣式：底部有底線的輸入框 */
         .input-underline {
             border-bottom: 1px solid #000 !important;
             border-radius: 0;
@@ -122,6 +121,7 @@
              border-bottom: 2px solid #000 !important;
         }
 
+        /* 讓 radio 保持方框外觀 (模擬複選框但功能為單選) */
         input[type="checkbox"], input[type="radio"] {
             width: 14px;
             height: 14px;
@@ -131,7 +131,7 @@
             -webkit-appearance: none;
             border: 1px solid #000;
             position: relative;
-            border-radius: 0; /* 讓單選框保持正方形 */
+            border-radius: 0;
         }
         input[type="checkbox"]:checked::after, input[type="radio"]:checked::after {
             content: "✔";
@@ -146,7 +146,7 @@
         /* 表格主體 */
         table {
             width: 100%;
-            flex-grow: 1; /* 表格自動填滿剩餘高度 */
+            flex-grow: 1;
             border-collapse: collapse;
             border: 2px solid #000;
             table-layout: fixed;
@@ -160,7 +160,6 @@
         }
         .text-center { text-align: center; font-weight: bold; }
         
-        /* 表格內部佈局工具 */
         .flex-center {
             display: flex;
             justify-content: center;
@@ -177,12 +176,9 @@
             padding-left: 5px;
         }
 
-        /* 針對特定欄位的微調 */
-        /* 第一列：基本資料 */
         .basic-info-row { height: 6%; }
         .basic-info-input { width: 100%; height: 100%; text-align: center; font-size: 18px;}
 
-        /* 第二列：日期與假別 */
         .date-type-row { height: 20%; }
         .date-section {
             display: flex;
@@ -208,22 +204,23 @@
             cursor: pointer;
         }
 
-        /* 第三列：說明 */
-        .desc-row { height: 35%; } /* 拉高說明區塊 */
+        .desc-row { height: 35%; }
         .desc-textarea {
             width: 100%;
             height: 100%;
+            min-height: 220px;
+            display: block;
             resize: none;
-            padding: 15px;
+            padding: 8px 10px;
             font-size: 20px;
             line-height: 1.5;
             background-color: transparent;
             text-align: left;
-            vertical-align: top;
-            box-sizing: border-box; /* 確保 padding 運作，緊貼左上 */
+            box-sizing: border-box;
+            border: none;
+            outline: none;
         }
 
-        /* 第四列：證明文件 */
         .doc-row { height: 20%; }
         .doc-group {
             display: flex;
@@ -236,7 +233,6 @@
             cursor: pointer;
         }
 
-        /* 第五列：審核結果 */
         .result-row { height: 7%; }
         .result-group {
             display: flex;
@@ -246,14 +242,15 @@
             font-size: 18px;
         }
 
-        /* 第六列：簽名區 */
-        .sig-title-row { height: 4%; }
-        .sig-title-row th { width: 25%; }
-        .sig-input-row { height: 8%; }
-        .sig-input-row td { padding: 0; }
-        .sig-input { width: 100%; height: 100%; text-align: center; font-size: 72px; font-weight: bold;}
+        /* 簽名區輸入框 */
+        .sig-input { 
+            width: 100%; 
+            height: 100%; 
+            text-align: center; 
+            font-size: 72px; /* 字體放大 3 倍 */
+            font-weight: bold;
+        }
 
-        /* 右下角編號 */
         .form-id {
             text-align: right;
             font-size: 12px;
@@ -262,7 +259,6 @@
             z-index: 1;
         }
 
-        /* 隱藏/截圖模式按鈕 */
         .controls {
             position: fixed;
             bottom: 20px;
@@ -282,8 +278,7 @@
         }
         .controls button:hover { background-color: #0056b3; }
 
-        /* 列印/截圖模式專用 CSS */
-        @media print, (max-width: 0) /* 後者為強制觸發用，實務靠 class 切換 */ {
+        @media print, (max-width: 0) {
             body { background-color: white; padding: 0; display: block; }
             .a4-paper { box-shadow: none; padding: 0; margin: 0; }
             .controls { display: none; }
@@ -398,7 +393,7 @@
                 <!-- 3. 說明 -->
                 <tr class="desc-row">
                     <td class="text-center">請假事項<br>說明</td>
-                    <td colspan="5" style="padding: 0;">
+                    <td colspan="5" style="padding: 0; vertical-align: top; height: 100%;">
                         <textarea class="desc-textarea"></textarea>
                     </td>
                 </tr>
@@ -432,27 +427,23 @@
                     </td>
                 </tr>
 
-                <!-- 6. 簽名區 -->
+                <!-- 6. 簽名區 (改用內部巢狀表格完全解決格線錯位問題) -->
                 <tr>
-                    <td colspan="6" style="padding: 0; height: 12%;">
-                        <div style="display: flex; width: 100%; height: 100%;">
-                            <div style="flex: 1; border-right: 1px solid #000; display: flex; flex-direction: column;">
-                                <div style="height: 30%; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">店長</div>
-                                <div style="height: 70%;"><input type="text" class="sig-input"></div>
-                            </div>
-                            <div style="flex: 1; border-right: 1px solid #000; display: flex; flex-direction: column;">
-                                <div style="height: 30%; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">總監</div>
-                                <div style="height: 70%;"><input type="text" class="sig-input"></div>
-                            </div>
-                            <div style="flex: 1; border-right: 1px solid #000; display: flex; flex-direction: column;">
-                                <div style="height: 30%; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">副處長</div>
-                                <div style="height: 70%;"><input type="text" class="sig-input"></div>
-                            </div>
-                            <div style="flex: 1; display: flex; flex-direction: column;">
-                                <div style="height: 30%; border-bottom: 1px solid #000; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 16px;">處長</div>
-                                <div style="height: 70%;"><input type="text" class="sig-input"></div>
-                            </div>
-                        </div>
+                    <td colspan="6" style="padding: 0; height: 16%;">
+                        <table style="width: 100%; height: 100%; border-collapse: collapse; border: none; margin: 0;">
+                            <tr style="height: 30%;">
+                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-left: none;">店長</td>
+                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">總監</td>
+                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none;">副處長</td>
+                                <td style="width: 25%; text-align: center; font-weight: bold; border-top: none; border-right: none;">處長</td>
+                            </tr>
+                            <tr style="height: 70%;">
+                                <td style="padding: 0; border-bottom: none; border-left: none;"><input type="text" class="sig-input"></td>
+                                <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
+                                <td style="padding: 0; border-bottom: none;"><input type="text" class="sig-input"></td>
+                                <td style="padding: 0; border-bottom: none; border-right: none;"><input type="text" class="sig-input"></td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </tbody>
@@ -480,23 +471,14 @@
             document.getElementById('fill-day').value = today.getDate();
         });
 
-        // 截圖/列印模式切換 (隱藏輸入框底色)
+        // 截圖/列印模式切換 (已移除提示框)
         let isPrintMode = false;
         function togglePrintMode() {
             isPrintMode = !isPrintMode;
             if (isPrintMode) {
                 document.body.classList.add('print-mode');
-                // 提示訊息
-                let notice = document.createElement('div');
-                notice.id = 'mode-notice';
-                notice.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; font-size: 16px; cursor: pointer; text-align: center;';
-                notice.innerHTML = '已進入截圖模式<br><span style="font-size:12px; color:#ccc;">(點擊此框即可還原編輯模式)</span>';
-                notice.onclick = togglePrintMode;
-                document.body.appendChild(notice);
             } else {
                 document.body.classList.remove('print-mode');
-                const notice = document.getElementById('mode-notice');
-                if (notice) notice.remove();
             }
         }
     </script>
