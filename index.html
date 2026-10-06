@@ -261,38 +261,12 @@
             z-index: 1;
         }
 
-        .controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-        .controls button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: background-color 0.2s;
-        }
-        .controls button:hover { background-color: #0056b3; }
-
-        @media print, (max-width: 0) {
+        @media print {
             body { background-color: white; padding: 0; display: block; }
             .a4-paper { box-shadow: none; padding: 0; margin: 0; }
-            .controls { display: none; }
             input[type="text"], textarea { background-color: transparent !important; border: none !important;}
             .input-underline { border-bottom: 1px solid #000 !important; }
         }
-        .print-mode {
-             background-color: white; padding: 0;
-        }
-        .print-mode .a4-paper { box-shadow: none; margin: 0 auto;}
-        .print-mode input[type="text"], .print-mode textarea { background-color: transparent !important; }
-        .print-mode .input-underline:not(:focus) { border-bottom: 1px solid #000 !important; }
 
     </style>
 </head>
@@ -455,13 +429,6 @@
         <div class="form-id">HR-2022-11-16</div>
     </div>
 
-    <!-- 控制按鈕 -->
-    <div class="controls no-print">
-        <button onclick="togglePrintMode()">
-            🖼️ 切換截圖/列印模式
-        </button>
-    </div>
-
     <script>
         // 自動載入今日日期 (轉換為民國年)
         window.addEventListener('DOMContentLoaded', () => {
@@ -472,17 +439,6 @@
             document.getElementById('fill-month').value = today.getMonth() + 1;
             document.getElementById('fill-day').value = today.getDate();
         });
-
-        // 截圖/列印模式切換
-        let isPrintMode = false;
-        function togglePrintMode() {
-            isPrintMode = !isPrintMode;
-            if (isPrintMode) {
-                document.body.classList.add('print-mode');
-            } else {
-                document.body.classList.remove('print-mode');
-            }
-        }
     </script>
 </body>
 </html>
