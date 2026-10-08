@@ -753,7 +753,7 @@
             for (let i = 0; i < 12; i++) { // 根據圖片大約產生 12 列
                 rowsHtml += `
                     <tr style="height: 38px;">
-                        <td><input type="text" class="full-width" style="border:none;"></td>
+                        <td><input type="text" class="full-width" style="border:none;" oninput="updateAmount(this)"></td>
                         <td>
                             <input type="text" style="width: 30px; text-align:center; border:none; background:transparent;"> 年
                             <input type="text" style="width: 30px; text-align:center; border:none; background:transparent;"> 個月
@@ -762,13 +762,24 @@
                             <input type="text" style="width: 25px; text-align:center; border:none; background:transparent;"> 月
                             <input type="text" style="width: 25px; text-align:center; border:none; background:transparent;"> 日
                         </td>
-                        <td><input type="text" class="full-width" style="border:none;"></td>
+                        <td><input type="text" class="full-width amount-input" style="border:none; text-align:center;"></td>
                         <td><input type="text" class="full-width" style="border:none;"></td>
                         <td><input type="text" class="full-width" style="border:none;"></td>
                     </tr>
                 `;
             }
             tbody.innerHTML = rowsHtml;
+        }
+
+        // 根據姓名自動填入申請金額 600
+        function updateAmount(nameInput) {
+            const tr = nameInput.closest('tr');
+            const amountInput = tr.querySelector('.amount-input');
+            if (nameInput.value.trim() !== '') {
+                amountInput.value = '600';
+            } else {
+                amountInput.value = '';
+            }
         }
 
         // 頁面載入初始化
