@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手舞足道人事表單系統</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "微軟正黑體", "Microsoft JhengHei", sans-serif;
+            background-color: #525659;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 改為 flex-start 讓 A4 紙張從頂部往下排 */
+            min-height: 100vh;
+            padding: 80px 20px 40px 20px; /* 上方預留空間給 fixed 選單 */
+        }
+
+        .tab-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .tab-menu button {
+            background-color: #555;
+            color: #fff;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: "微軟正黑體", sans-serif;
+        }
+        .tab-menu button:hover {
+            background-color: #777;
+        }
+        .tab-menu button.active {
+            background-color: #007bff;
+            border-color: #cce5ff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        .form-page {
+            display: none; /* 預設隱藏 */
+            width: 100%;
+            justify-content: center;
+        }
+        .form-page.active {
+            display: flex; /* 只顯示 active 的表單 */
+        }
+
+        .a4-paper {
+            background-color: #fff;
+            width: 210mm;
+            height: 297mm;
+            padding: 15mm;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .form-id {
+            text-align: right;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            margin-top: 5px;
+            z-index: 1;
+        }
+
+        /* ======================================================== */
+        /* 表單 1 專用樣式 (完全保留原有設定) */
+        /* ======================================================== */
+        #form1 .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 5px;
+            z-index: 1;
+        }
+        #form1 .header img {
+            position: absolute;
+            left: 0;
+            top: -10px;
+            height: 60px;
+        }
+        #form1 .header h1 {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        #form1 .header h2 {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+        #form1 .info-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        #form1 .business-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        #form1 .business-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        #form1 .date-input {
+            display: flex;
+            align-items: baseline;
+            align-self: flex-end;
+            margin-top: 5px;
+        }
+        
+        input[type="text"], textarea {
+            font-family: inherit;
+            font-size: 16px;
+            border: none;
+            background-color: rgba(240, 248, 255, 0.3);
+            outline: none;
+        }
+        input[type="text"]:focus, textarea:focus {
+            background-color: rgba(230, 240, 255, 0.8);
+            border-bottom: 1px dashed #333;
+        }
+        .input-underline {
+            border-bottom: 1px solid #000 !important;
+            border-radius: 0;
+            background-color: transparent !important;
+            text-align: center;
+        }
+        .input-underline:focus {
+             border-bottom: 2px solid #000 !important;
+        }
+        input[type="checkbox"], input[type="radio"] {
+            width: 14px;
+            height: 14px;
+            margin-right: 3px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            border: 1px solid #000;
+            position: relative;
+            border-radius: 0;
+        }
+        input[type="checkbox"]:checked::after, input[type="radio"]:checked::after {
+            content: "✔";
+            position: absolute;
+            top: -4px;
+            left: 1px;
+            font-size: 14px;
+            color: black;
+            font-weight: bold;
+        }
+        #form1 table {
+            width: 100%;
+            height: 100%;
+            flex: 1 1 auto;
+            min-height: 0;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            table-layout: fixed;
+            z-index: 1;
+        }
+        #form1 th, #form1 td {
+            border: 1px solid #000;
+            padding: 8px;
+            vertical-align: middle;
+            font-size: 16px;
+        }
+        .text-center { text-align: center; font-weight: bold; }
+        .flex-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100%;
+            padding-left: 5px;
+        }
+
+        #form1 .basic-info-row { height: 6%; }
+        #form1 .basic-info-input { width: 100%; height: 100%; text-align: center; font-size: 18px;}
+        #form1 .date-type-row { height: 18%; }
+        #form1 .date-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            padding-left: 10px;
+            font-size: 16px;
+        }
+        #form1 .date-line { display: flex; align-items: baseline; }
+        #form1 .leave-type-group { display: flex; flex-direction: column; gap: 5px; }
+        #form1 .leave-type-group label { display: flex; align-items: center; cursor: pointer; }
+        
+        #form1 .desc-row { height: 6%; }
+        #form1 .desc-textarea {
+            width: 100%; height: 100%; display: block; resize: none; padding: 8px 10px;
+            font-size: 16px; line-height: 1.5; background-color: transparent; border: none; outline: none;
+        }
+        #form1 .doc-row { height: 18%; }
+        #form1 .doc-group { display: flex; flex-direction: column; gap: 5px; }
+        #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
+        #form1 .result-row { height: 7%; }
+        #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
+
+        /* 表單 1 - 簽名區高度修正為一半 19% */
+        #form1 .signature-row { 
+            height: 19%; 
+            min-height: 120px;
+        }
+        #form1 .sig-box-container {
+            width: 100%; height: 100%; min-height: 120px; display: flex;
+        }
+        #form1 .sig-box {
+            flex: 1; display: flex; flex-direction: column; border-right: 1px solid #000;
+        }
+        #form1 .sig-box:last-child { border-right: none; }
+        #form1 .sig-title {
+            text-align: center; font-weight: bold; border-bottom: 1px solid #000;
+            padding: 8px 0; background-color: rgba(0,0,0,0.03); height: 42px; line-height: 26px;
+        }
+        #form1 .sig-content { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
+        #form1 .sig-input { 
+            width: 90%; height: 90%; text-align: center; font-size: 36px;
+            font-weight: bold; background-color: transparent; border: none;
+        }
+        #form1 .sig-input:focus { border-bottom: 1px dashed #333; outline: none; }
+
+
+        /* ======================================================== */
+        /* 表單 2 & 3 專用樣式 (福利關懷申請單 & 明細表) */
+        /* ======================================================== */
+        .f-header {
+            text-align: center;
+            margin-bottom: 15px;
+            z-index: 1;
+            position: relative;
+        }
+        .f-header img {
+            position: absolute;
+            left: 0;
+            top: -10px;
+            height: 50px;
+        }
+        .f-header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .f-header h2 {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .f-header h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .f-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        .text-red { color: red; }
+
+        #form2 table {
+            width: 100%;
+            flex-grow: 1;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            table-layout: fixed;
+            z-index: 1;
+        }
+        #form2 th, #form2 td {
+            border: 1px solid #000;
+            padding: 10px 8px;
+            vertical-align: middle;
+            font-size: 15px;
+        }
+        #form2 th { background-color: rgba(0,0,0,0.03); font-weight: bold; text-align: center; }
+        #form2 .sig-row { height: 120px; }
+        
+        #form3 table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #000;
+            table-layout: fixed;
+            z-index: 1;
+        }
+        #form3 th, #form3 td {
+            border: 1px solid #000;
+            padding: 8px 5px;
+            vertical-align: middle;
+            font-size: 15px;
+            text-align: center;
+        }
+        #form3 th { background-color: rgba(0,0,0,0.03); font-weight: bold; }
+        #form3 td input.full-width {
+            width: 100%;
+            text-align: center;
+            background-color: transparent;
+        }
+        
+        .f3-remarks {
+            flex-grow: 1;
+            border: 2px solid #000;
+            border-top: none;
+            padding: 10px 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            z-index: 1;
+            font-weight: bold;
+        }
+        .f3-remarks p { margin-bottom: 3px; }
+        .f3-remarks .indent { padding-left: 20px; font-weight: normal;}
+
+        @media print {
+            body { background-color: white; padding: 0; display: block; }
+            .tab-menu { display: none !important; } /* 絕對隱藏選單 */
+            .form-page { display: none !important; }
+            .form-page.active { display: block !important; } /* 只印出 active 的那個 */
+            .a4-paper { box-shadow: none; padding: 0; margin: 0; width: 100%; height: auto; min-height: 297mm;}
+            input[type="text"], textarea { background-color: transparent !important; border: none !important;}
+            .input-underline { border-bottom: 1px solid #000 !important; }
+            #form1 .sig-input:focus { border-bottom: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tab-menu no-print">
+        <button id="btn-form1" class="active" onclick="switchTab('form1')">長假申請單</button>
+        <button id="btn-form2" onclick="switchTab('form2')">福利關懷申請單</button>
+        <button id="btn-form3" onclick="switchTab('form3')">福利關懷明細表</button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 表單 1: 員工長假申請單 (原始代碼) -->
+    <!-- ======================================================== -->
+    <div id="form1" class="form-page active">
+        <div class="a4-paper">
+            <img src="手舞足道.png" alt="watermark" class="watermark" onerror="this.style.display='none'">
+            <div class="header">
+                <img src="手舞足道.png" alt="Logo" onerror="this.style.display='none'">
+                <h1>手舞足道休閒餐旅事業集團</h1>
+                <h2>員工長假申請單</h2>
+            </div>
+            <div class="info-row">
+                <div class="business-group">
+                    <span>事業群：</span>
+                    <label><input type="radio" name="bg"> 休閒美體事業群</label>
+                    <label><input type="radio" name="bg"> 餐飲事業群</label>
+                    <label><input type="radio" name="bg"> 健身事業群</label>
+                    <label><input type="radio" name="bg"> 總管理處</label>
+                </div>
+                <div class="date-input">
+                    <span>填寫日期：</span>
+                    <input type="text" id="fill-year-1" class="input-underline" style="width: 40px;"> 年
+                    <input type="text" id="fill-month-1" class="input-underline" style="width: 30px;"> 月
+                    <input type="text" id="fill-day-1" class="input-underline" style="width: 30px;"> 日
+                </div>
+            </div>
+            <table>
+                <colgroup>
+                    <col style="width: 12%;">
+                    <col style="width: 21.33%;">
+                    <col style="width: 12%;">
+                    <col style="width: 21.33%;">
+                    <col style="width: 12%;">
+                    <col style="width: 21.34%;">
+                </colgroup>
+                <tbody>
+                    <tr class="basic-info-row">
+                        <td class="text-center">申請單位</td>
+                        <td style="padding:0;"><input type="text" class="basic-info-input"></td>
+                        <td class="text-center">職稱</td>
+                        <td style="padding:0;"><input type="text" class="basic-info-input"></td>
+                        <td class="text-center">員工姓名</td>
+                        <td style="padding:0;"><input type="text" class="basic-info-input"></td>
+                    </tr>
+                    <tr class="date-type-row">
+                        <td class="text-center">請假日期</td>
+                        <td colspan="3">
+                            <div class="date-section">
+                                <div class="date-line">
+                                    <span style="margin-right: 5px;">自</span>
+                                    <input type="text" class="input-underline" style="width: 40px; margin: 0 5px;"> 年
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 月
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 日
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 時
+                                </div>
+                                <div class="date-line">
+                                    <span style="margin-right: 5px;">至</span>
+                                    <input type="text" class="input-underline" style="width: 40px; margin: 0 5px;"> 年
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 月
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 日
+                                    <input type="text" class="input-underline" style="width: 30px; margin: 0 5px;"> 時
+                                </div>
+                                <div class="date-line" style="margin-top: 15px; margin-left: 20px;">
+                                    <span>共計 (</span>
+                                    <input type="text" style="width: 60px; text-align: center; border-bottom: 1px dashed #999;">
+                                    <span>) 天</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">假別</td>
+                        <td>
+                            <div class="flex-left leave-type-group">
+                                <label><input type="checkbox"> 事假</label>
+                                <label><input type="checkbox"> 病假/公傷病假</label>
+                                <label><input type="checkbox"> 特休/補休</label>
+                                <label><input type="checkbox"> 婚假</label>
+                                <label><input type="checkbox"> 產假</label>
+                                <label><input type="checkbox"> 喪假</label>
+                                <div style="display: flex; align-items: baseline;">
+                                    <label style="margin-right: 5px;"><input type="checkbox"> 其他</label>
+                                    <input type="text" class="input-underline" style="width: 80px;">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="desc-row">
+                        <td class="text-center">請假事項<br>說明</td>
+                        <td colspan="5" style="padding: 0; vertical-align: top; height: 100%;">
+                            <textarea class="desc-textarea"></textarea>
+                        </td>
+                    </tr>
+                    <tr class="doc-row">
+                        <td class="text-center">檢附證明<br>文件</td>
+                        <td colspan="5">
+                            <div class="flex-left doc-group">
+                                <label><input type="checkbox"> 醫師診斷證明</label>
+                                <label><input type="checkbox"> 已完成結婚登記之戶籍謄本</label>
+                                <label><input type="checkbox"> 新生兒出生證明</label>
+                                <label><input type="checkbox"> 訃文影本</label>
+                                <label><input type="checkbox"> 護照、簽證影本或旅行社證明</label>
+                                <div style="display: flex; align-items: baseline; width: 100%;">
+                                    <label style="margin-right: 5px;"><input type="checkbox"> 其他</label>
+                                    <input type="text" class="input-underline" style="flex-grow: 1; max-width: 300px; text-align: left; padding-left: 5px;">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="result-row">
+                        <td class="text-center">審核結果</td>
+                        <td colspan="5">
+                            <div class="result-group">
+                                <label style="cursor: pointer; display: flex; align-items: center;"><input type="checkbox"> 通過</label>
+                                <label style="cursor: pointer; display: flex; align-items: center;"><input type="checkbox"> 不予通過</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="signature-row">
+                        <td colspan="6" style="padding: 0; height: 100%;">
+                            <div class="sig-box-container">
+                                <div class="sig-box">
+                                    <div class="sig-title">店長</div>
+                                    <div class="sig-content"><input type="text" class="sig-input"></div>
+                                </div>
+                                <div class="sig-box">
+                                    <div class="sig-title">總監</div>
+                                    <div class="sig-content"><input type="text" class="sig-input"></div>
+                                </div>
+                                <div class="sig-box">
+                                    <div class="sig-title">副處長</div>
+                                    <div class="sig-content"><input type="text" class="sig-input"></div>
+                                </div>
+                                <div class="sig-box">
+                                    <div class="sig-title">處長</div>
+                                    <div class="sig-content"><input type="text" class="sig-input"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-id">HR-2022-11-16</div>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 表單 2: 福利關懷申請單 (新增) -->
+    <!-- ======================================================== -->
+    <div id="form2" class="form-page">
+        <div class="a4-paper">
+            <img src="手舞足道.png" alt="watermark" class="watermark" onerror="this.style.display='none'">
+            <div class="f-header">
+                <img src="手舞足道.png" alt="Logo" onerror="this.style.display='none'">
+                <h1>手舞足道休閒餐旅事業集團</h1>
+                <h2>休閒事業部師傅員工福利關懷申請單</h2>
+            </div>
+            <div class="f-info">
+                <div>
+                    <span>店別：</span>
+                    <input type="text" class="input-underline" style="width: 80px; font-weight: bold; font-size:16px;"> 店
+                </div>
+                <div>
+                    <span>發放月份：</span>
+                    <input type="text" id="fill-year-2" class="input-underline" style="width: 40px; font-weight: bold; font-size:16px;"> 年
+                    <input type="text" id="fill-month-2" class="input-underline" style="width: 30px; font-weight: bold; font-size:16px;"> 月
+                </div>
+                <div>
+                    <span>填寫日期：</span>
+                    <input type="text" id="fill-year-2-2" class="input-underline" style="width: 40px; font-weight: bold; font-size:16px;"> 年
+                    <input type="text" id="fill-month-2-2" class="input-underline" style="width: 30px; font-weight: bold; font-size:16px;"> 月
+                    <input type="text" id="fill-day-2" class="input-underline" style="width: 30px; font-weight: bold; font-size:16px;"> 日
+                </div>
+            </div>
+            <table>
+                <colgroup>
+                    <col style="width: 18%;">
+                    <col style="width: 52%;">
+                    <col style="width: 10%;">
+                    <col style="width: 20%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>申請項目</th>
+                        <th>檢附證明文件</th>
+                        <th>人數</th>
+                        <th>各項合計金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">敬老津貼</td>
+                        <td>贈予父母敬老津貼紅包袋之合照照片</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">生日禮金</td>
+                        <td>必要時檢附出生日期證明</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">結婚禮金</td>
+                        <td class="text-red">戶口名簿影本(載明結婚登記)或喜帖</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">生育禮金</td>
+                        <td>生產證明（如出生證明、戶口名簿影本等）</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">子女獎學金</td>
+                        <td>子女成績證明（如學校之成績單、單科考卷等），<br>及頒發子女獎學金紅包袋之合照照片</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">重大傷病住院<br>慰問金</td>
+                        <td>醫療證明（如醫院住院證明、診斷書等）</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">喪葬補助</td>
+                        <td class="text-red">相關證明(如死亡證明、訃文等)</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-center" style="font-size: 18px;">總金額(NT$)</td>
+                        <td><input type="text" class="full-width" style="width: 100%; text-align: center; border:none; background:transparent; font-size:18px; font-weight:bold;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">審核結果</td>
+                        <td colspan="3">
+                            <div style="display: flex; justify-content: center; gap: 40px; font-weight: bold;">
+                                <label><input type="checkbox"> 通過</label>
+                                <label><input type="checkbox"> 不予通過</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="height: 40px;">店長(申請人)</td>
+                        <td class="text-center">總監(初審)</td>
+                        <td colspan="2" class="text-center">處長(核准)</td>
+                    </tr>
+                    <tr class="sig-row">
+                        <td><input type="text" style="width:100%; height:100%; border:none; background:transparent; text-align:center; font-size:24px;"></td>
+                        <td><input type="text" style="width:100%; height:100%; border:none; background:transparent; text-align:center; font-size:24px;"></td>
+                        <td colspan="2"><input type="text" style="width:100%; height:100%; border:none; background:transparent; text-align:center; font-size:24px;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 表單 3: 福利關懷明細表暨簽收單 (新增) -->
+    <!-- ======================================================== -->
+    <div id="form3" class="form-page">
+        <div class="a4-paper">
+            <img src="手舞足道.png" alt="watermark" class="watermark" onerror="this.style.display='none'">
+            <div class="f-header">
+                <img src="手舞足道.png" alt="Logo" onerror="this.style.display='none'">
+                <h1>手舞足道休閒餐旅事業集團</h1>
+                <h2>休閒事業部師傅員工福利關懷申請明細表暨簽收單</h2>
+                <h3>(生日禮金)</h3>
+            </div>
+            <div class="f-info" style="margin-bottom: 5px;">
+                <div>
+                    <span>店別：</span>
+                    <input type="text" class="input-underline" style="width: 80px; font-weight: bold; font-size:16px;"> 店
+                </div>
+                <div>
+                    <span>發放月份：</span>
+                    <input type="text" id="fill-year-3" class="input-underline" style="width: 40px; font-weight: bold; font-size:16px;"> 年
+                    <input type="text" id="fill-month-3" class="input-underline" style="width: 30px; font-weight: bold; font-size:16px;"> 月
+                </div>
+            </div>
+            <table style="flex-grow: 0;">
+                <colgroup>
+                    <col style="width: 18%;">
+                    <col style="width: 20%;">
+                    <col style="width: 17%;">
+                    <col style="width: 12%;">
+                    <col style="width: 18%;">
+                    <col style="width: 15%;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>師傅/員工<br>姓名</th>
+                        <th>年資</th>
+                        <th>生日日期</th>
+                        <th>申請金額</th>
+                        <th>簽名<br>(正楷簽名)</th>
+                        <th>簽收日期</th>
+                    </tr>
+                </thead>
+                <tbody id="f3-tbody">
+                    <!-- Javascript 將自動產生多列空白輸入區 -->
+                </tbody>
+            </table>
+            
+            <div class="f3-remarks">
+                <p>【備註】</p>
+                <p>1、符合條件：<span class="text-red">服務年資滿半年(含)以上生日者</span></p>
+                <p>2、禮金金額：$600 元</p>
+                <p>3、申請期間：<span class="text-red">每月 15 日前申請次月生日名單及金額</span></p>
+                <p>4、發放期間：於生日當月發放 (發放當日仍在職者)</p>
+                <p>5、發放方式：各門店月例會時統一頒發</p>
+                <p>6、申請發放流程：</p>
+                <p class="indent">(1) 期限內提交經審核之申請單、申請明細表及所需附件上傳至各店日誌群組(申請相簿)</p>
+                <p class="indent">(2) 總部將核准申請單上傳各店日誌群組(核准相簿)</p>
+                <p class="indent">(3) 各店依核准申請單於發放期間發放並請人員簽收</p>
+                <p class="indent">(4) 各店上傳簽收單至各店日誌群組(核准相簿)</p>
+                <p class="indent">(5) 總部進行覆查及統計</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 切換分頁選單邏輯
+        function switchTab(tabId) {
+            // 隱藏所有表單
+            document.querySelectorAll('.form-page').forEach(el => {
+                el.classList.remove('active');
+            });
+            // 移除按鈕 active 狀態
+            document.querySelectorAll('.tab-menu button').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // 顯示選擇的表單並啟動按鈕
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // 自動產生表單 3 的多列表格列
+        function generateForm3Rows() {
+            const tbody = document.getElementById('f3-tbody');
+            // 第一列當作範例或可直接填寫
+            let rowsHtml = '';
+            for (let i = 0; i < 12; i++) { // 根據圖片大約產生 12 列
+                rowsHtml += `
+                    <tr style="height: 38px;">
+                        <td><input type="text" class="full-width" style="border:none;"></td>
+                        <td>
+                            <input type="text" style="width: 30px; text-align:center; border:none; background:transparent;"> 年
+                            <input type="text" style="width: 30px; text-align:center; border:none; background:transparent;"> 個月
+                        </td>
+                        <td>
+                            <input type="text" style="width: 25px; text-align:center; border:none; background:transparent;"> 月
+                            <input type="text" style="width: 25px; text-align:center; border:none; background:transparent;"> 日
+                        </td>
+                        <td><input type="text" class="full-width" style="border:none;"></td>
+                        <td><input type="text" class="full-width" style="border:none;"></td>
+                        <td><input type="text" class="full-width" style="border:none;"></td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = rowsHtml;
+        }
+
+        // 頁面載入初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            generateForm3Rows();
+
+            const today = new Date();
+            const twYear = today.getFullYear() - 1911;
+            const month = today.getMonth() + 1;
+            const day = today.getDate();
+            
+            // 計算次月發放日期 (若當月為12月，則年份+1，月份變1月)
+            let nextMonth = month + 1;
+            let nextMonthTwYear = twYear;
+            if (nextMonth > 12) {
+                nextMonth = 1;
+                nextMonthTwYear++;
+            }
+            
+            // 表單 1 日期
+            document.getElementById('fill-year-1').value = twYear;
+            document.getElementById('fill-month-1').value = month;
+            document.getElementById('fill-day-1').value = day;
+
+            // 表單 2 日期 (發放為次月，填寫為當前)
+            document.getElementById('fill-year-2').value = nextMonthTwYear;
+            document.getElementById('fill-month-2').value = nextMonth;
+            document.getElementById('fill-year-2-2').value = twYear;
+            document.getElementById('fill-month-2-2').value = month;
+            document.getElementById('fill-day-2').value = day;
+
+            // 表單 3 日期 (發放為次月)
+            document.getElementById('fill-year-3').value = nextMonthTwYear;
+            document.getElementById('fill-month-3').value = nextMonth;
+        });
+    </script>
+</body>
+</html>
