@@ -202,25 +202,27 @@
         #form1 .business-group { display: flex; gap: 15px; align-items: center; }
         #form1 .business-group label { display: flex; align-items: center; cursor: pointer; font-weight: normal; }
         #form1 .date-input { display: flex; align-items: baseline; align-self: flex-end; margin-top: 5px; }
-        #form1 table { width: 100%; height: 100%; flex: 1 1 auto; min-height: 0; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; z-index: 1; }
+        
+        /* 移除 height: 100% 及 flex 延展，讓表格自然縮小 */
+        #form1 table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; z-index: 1; margin-bottom: auto; }
         #form1 th, #form1 td { border: 1px solid #000; padding: 8px; vertical-align: middle; font-size: 16px; }
         .text-center { text-align: center; font-weight: bold; }
         .flex-left { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 100%; padding-left: 5px; }
-        #form1 .basic-info-row { height: 6%; }
+        #form1 .basic-info-row { height: 40px; }
         #form1 .basic-info-input { width: 100%; height: 100%; text-align: center; font-size: 18px;}
-        #form1 .date-type-row { height: 18%; }
-        #form1 .date-section { display: flex; flex-direction: column; justify-content: center; gap: 15px; padding-left: 10px; font-size: 16px; }
+        #form1 .date-type-row { height: auto; padding: 10px 0; }
+        #form1 .date-section { display: flex; flex-direction: column; justify-content: center; gap: 15px; padding: 10px; font-size: 16px; }
         #form1 .date-line { display: flex; align-items: baseline; }
-        #form1 .leave-type-group { display: flex; flex-direction: column; gap: 5px; }
+        #form1 .leave-type-group { display: flex; flex-direction: column; gap: 5px; padding: 10px 5px; }
         #form1 .leave-type-group label { display: flex; align-items: center; cursor: pointer; }
         #form1 .desc-row { height: auto; }
-        #form1 .desc-textarea { width: 100%; height: 100%; min-height: 80px; display: block; resize: none; padding: 8px 10px; font-size: 16px; line-height: 1.5; background-color: transparent; border: none; outline: none; }
-        #form1 .doc-row { height: 18%; }
-        #form1 .doc-group { display: flex; flex-direction: column; gap: 5px; }
+        #form1 .desc-textarea { width: 100%; height: 100%; min-height: 120px; display: block; resize: none; padding: 8px 10px; font-size: 16px; line-height: 1.5; background-color: transparent; border: none; outline: none; }
+        #form1 .doc-row { height: auto; }
+        #form1 .doc-group { display: flex; flex-direction: column; gap: 5px; padding: 10px 5px; }
         #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
-        #form1 .result-row { height: 7%; }
+        #form1 .result-row { height: 50px; }
         #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
-        #form1 .signature-row { height: 80px; }
+        #form1 .signature-row { height: 90px; }
 
         /* ======================================================== */
         /* 明細表系列 (表單 2~8) 共用樣式 */
@@ -621,7 +623,7 @@
             </table>
             <div class="f3-remarks">
                 <p>【備註】</p>
-                <p class="indent">1、符合條件：本人及其直系親屬(父母、配偶、子女)身故時(夫妻同為集團人員者，以報領一份為限)</p>
+                <p>1、符合條件：本人及其直系親屬(父母、配偶、子女)身故時(夫妻同為集團人員者，以報領一份為限)</p>
                 <p>2、補助金額：</p>
                 <div style="display:flex; justify-content: flex-start; padding-left: 20px; font-weight:normal; gap: 40px;">
                     <div style="text-align: left;">
@@ -668,7 +670,7 @@
             </table>
             <div class="f3-remarks">
                 <p>【備註】</p>
-                <p class="indent">1、符合條件：本人結婚時(僅限申請乙次；夫妻同為集團人員者，以報領一份為限)</p>
+                <p>1、符合條件：本人結婚時(僅限申請乙次；夫妻同為集團人員者，以報領一份為限)</p>
                 <p>2、禮金金額：</p>
                 <div style="display:flex; padding-left: 25px; font-weight:normal;">
                     <div style="margin-right: 50px;">服務年資滿 1 年(含)者<br>服務年資滿 3 年(含)者-銅賞<br>服務年資滿 5 年(含)者-銀賞<br>服務年資滿 8 年(含)者-金賞<br>服務年資滿 10 年(含)以上者-白金/鑽石</div>
@@ -708,7 +710,7 @@
             </table>
             <div class="f3-remarks">
                 <p>【備註】</p>
-                <p class="indent">1、符合條件：家中直系親屬(夫妻同為集團人員者，以報領一份為限)或本人有發生意外事故或疾病住院時</p>
+                <p>1、符合條件：家中直系親屬(夫妻同為集團人員者，以報領一份為限)或本人有發生意外事故或疾病住院時</p>
                 <p>2、慰問金金額：</p>
                 <p class="indent">3 天(含)以上住院者，給予 $1,000 元</p>
                 <p class="indent">7 天(含)以上住院者，給予 $2,000 元</p>
@@ -758,7 +760,7 @@
             </table>
             <div class="f3-remarks">
                 <p>【備註】</p>
-                <p class="indent">1、符合條件：服務年資滿 6 個月(含)以上，本人有就讀國中國小子女，學期成績達下列標準：(夫妻同為集團人員者，以報領一份為限)</p>
+                <p>1、符合條件：服務年資滿 6 個月(含)以上，本人有就讀國中國小子女，學期成績達下列標準：(夫妻同為集團人員者，以報領一份為限)</p>
                 <p>2、獎學金金額：</p>
                 <p class="indent">─ 學期平均分數達 90 分(含)以上或優等者，獎學金 $1000 元</p>
                 <p class="indent">─ 單科滿分者，獎學金 $100 元</p>
@@ -806,7 +808,7 @@
             </table>
             <div class="f3-remarks">
                 <p>【備註】</p>
-                <p class="indent">1、符合條件：服務年資滿 1 年(含)以上，且本人或其父母年齡 65 歲(含)以上者(夫妻同為集團人員者，其父母之敬老津貼以報領一份為限)</p>
+                <p>1、符合條件：服務年資滿 1 年(含)以上，且本人或其父母年齡 65 歲(含)以上者(夫妻同為集團人員者，其父母之敬老津貼以報領一份為限)</p>
                 <p>2、津貼金額：$600 元</p>
                 <p>3、申請期間：<span class="text-red">每年 9 月 15 日以前提出申請</span></p>
                 <p>4、發放期間：<span class="text-red">每年 10 月重陽節前 (發放當日仍在職者)</span></p>
@@ -914,9 +916,9 @@
 
             genRows('tb-form8', 10, `
                 <td><input type="text" class="full-width"></td>
-                <td><input type="text" style="width:25px;text-align:center;border:none;background:transparent;"> 年 <input type="text" style="width:20px;text-align:center;border:none;background:transparent;"> 月 <input type="text" style="width:20px;text-align:center;border:none;background:transparent;"> 日</td>
+                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:12.5px;margin:0 -2px;"><input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;">年<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">月<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">日</div></td>
                 <td><input type="text" class="full-width"></td>
-                <td><input type="text" style="width:25px;text-align:center;border:none;background:transparent;"> 年 <input type="text" style="width:20px;text-align:center;border:none;background:transparent;"> 月 <input type="text" style="width:20px;text-align:center;border:none;background:transparent;"> 日</td>
+                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:12.5px;margin:0 -2px;"><input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;">年<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">月<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">日</div></td>
                 <td><input type="text" class="full-width"></td><td><input type="text" class="full-width"></td>
                 <td><input type="text" class="full-width"></td>
             `);
