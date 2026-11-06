@@ -204,7 +204,7 @@
         #form1 .business-group label { display: flex; align-items: center; cursor: pointer; font-weight: normal; }
         #form1 .date-input { display: flex; align-items: baseline; align-self: flex-end; margin-top: 5px; }
         
-        #form1 table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; z-index: 1; margin-bottom: auto; }
+        #form1 table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; z-index: 1; margin-bottom: 0; }
         #form1 th, #form1 td { border: 1px solid #000; padding: 8px; vertical-align: middle; font-size: 16px; }
         .text-center { text-align: center; font-weight: bold; }
         .flex-left { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 100%; padding-left: 5px; }
@@ -222,7 +222,22 @@
         #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
         #form1 .result-row { height: 50px; }
         #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
-        #form1 .signature-row { height: 120px; } /* 固定高度為 120px */
+        
+        /* 長假申請單簽名區專屬合併樣式 */
+        #form1 .signature-row td { height: 120px; padding: 0; }
+        #form1 .sig-box-container { height: 120px; }
+        #form1 .sig-box { position: relative; }
+        #form1 .sig-title { 
+            position: absolute; 
+            top: 0; left: 0; 
+            background: transparent; 
+            border-bottom: none; 
+            text-align: left; 
+            padding: 6px 10px; 
+            height: auto; 
+            font-size: 15px; 
+        }
+        #form1 .sig-content { height: 100%; }
 
         /* ======================================================== */
         /* 明細表系列 (表單 2~8) 共用樣式 */
@@ -438,7 +453,7 @@
                         </td>
                     </tr>
                     <tr class="signature-row">
-                        <td colspan="6" style="padding: 0; height: 100%;">
+                        <td colspan="6">
                             <div class="sig-box-container">
                                 <div class="sig-box"><div class="sig-title">店長</div><div class="sig-content"><input type="text" class="sig-input"></div></div>
                                 <div class="sig-box"><div class="sig-title">總監</div><div class="sig-content"><input type="text" class="sig-input"></div></div>
