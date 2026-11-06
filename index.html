@@ -165,7 +165,7 @@
         .sig-box-container {
             width: 100%; 
             height: 100%; 
-            min-height: 120px; 
+            min-height: 100px; 
             display: flex;
         }
         .sig-box {
@@ -220,7 +220,7 @@
         #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
         #form1 .result-row { height: 7%; }
         #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
-        #form1 .signature-row { height: 19%; min-height: 120px; }
+        #form1 .signature-row { height: 120px; }
 
         /* ======================================================== */
         /* 明細表系列 (表單 2~8) 共用樣式 */
@@ -291,7 +291,7 @@
             font-weight: bold;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
         }
         .f3-remarks p { margin-bottom: 2px; }
         .f3-remarks .indent { 
@@ -624,10 +624,16 @@
                 <p>【備註】</p>
                 <p class="indent">1、符合條件：本人及其直系親屬(父母、配偶、子女)身故時(夫妻同為集團人員者，以報領一份為限)</p>
                 <p>2、補助金額：</p>
-                <div style="display:flex; justify-content: space-around; width: 80%; margin: 0 auto; text-align: center; font-weight:normal;">
-                    <div><br>服務年資未滿 1 年者<br>服務年資滿 1 年(含)者-銅賞<br>服務年資滿 3 年(含)者-銅賞<br>服務年資滿 5 年(含)者-銀賞<br>服務年資滿 8 年(含)者-金賞<br>服務年資滿 10 年(含)以上者-白金/鑽石</div>
-                    <div><b>本人身故</b><br>$5000<br>$10000<br>$30000<br>$50000<br>$80000<br>$100000</div>
-                    <div><b>直系親屬身故</b><br>$1100<br>$2100<br>$3100<br>$5100<br>$8100<br>$11000</div>
+                <div style="display:flex; justify-content: flex-start; padding-left: 20px; font-weight:normal; gap: 40px;">
+                    <div style="text-align: left;">
+                        <br>服務年資未滿 1 年者<br>服務年資滿 1 年(含)者-銅賞<br>服務年資滿 3 年(含)者-銅賞<br>服務年資滿 5 年(含)者-銀賞<br>服務年資滿 8 年(含)者-金賞<br>服務年資滿 10 年(含)以上者-白金/鑽石
+                    </div>
+                    <div style="text-align: left;">
+                        <b>本人身故</b><br>$5000<br>$10000<br>$30000<br>$50000<br>$80000<br>$100000
+                    </div>
+                    <div style="text-align: left;">
+                        <b>直系親屬身故</b><br>$1100<br>$2100<br>$3100<br>$5100<br>$8100<br>$11000
+                    </div>
                 </div>
                 <p>3、申請期間：<span class="text-red">事件發生後 30 天內</span></p>
                 <p>4、發放期間：<span class="text-red">核准完成後即可發放</span></p>
