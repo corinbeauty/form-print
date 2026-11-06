@@ -222,7 +222,7 @@
         #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
         #form1 .result-row { height: 50px; }
         #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
-        #form1 .signature-row { height: 65px; } /* 固定與 Form 2 相仿的高度 */
+        #form1 .signature-row { height: 120px; } /* 固定高度為 120px */
 
         /* ======================================================== */
         /* 明細表系列 (表單 2~8) 共用樣式 */
@@ -877,6 +877,12 @@
             amountInput.value = nameInput.value.trim() !== '' ? '600' : '';
         }
 
+        function updateAmountForm8(nameInput) {
+            const tr = nameInput.closest('tr');
+            const amountInput = tr.querySelector('.amount-input');
+            amountInput.value = nameInput.value.trim() !== '' ? '600' : '';
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             // 生成各表單表格列
             genRows('tb-form3', 12, `
@@ -915,11 +921,12 @@
             `);
 
             genRows('tb-form8', 10, `
-                <td><input type="text" class="full-width"></td>
+                <td><input type="text" class="full-width" oninput="updateAmountForm8(this)"></td>
                 <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:13px;margin:0;"><input type="text" style="width:28px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">年<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">月<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">日</div></td>
                 <td><input type="text" class="full-width"></td>
                 <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:13px;margin:0;"><input type="text" style="width:28px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">年<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">月<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">日</div></td>
-                <td><input type="text" class="full-width"></td><td><input type="text" class="full-width"></td>
+                <td><input type="text" class="full-width amount-input" style="pointer-events: none;" readonly></td>
+                <td><input type="text" class="full-width"></td>
                 <td><input type="text" class="full-width"></td>
             `);
 
