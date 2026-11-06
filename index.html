@@ -385,14 +385,21 @@
             z-index: 1;
             font-weight: bold;
         }
-        .f-remarks p { margin-bottom: 3px; }
-        .f-remarks .indent { padding-left: 20px; font-weight: normal;}
+        .f-remarks p { 
+            margin-bottom: 3px; 
+            padding-left: 24px;
+            text-indent: -24px;
+        }
+        .f-remarks .indent { 
+            padding-left: 44px; 
+            font-weight: normal;
+        }
         
         /* 備註內的小表格 */
         .remarks-table {
             width: 100%;
             max-width: 400px;
-            margin: 5px 0 5px 20px;
+            margin: 5px 0 5px 24px;
             border-collapse: collapse;
             font-weight: normal;
         }
@@ -1067,9 +1074,9 @@
             </td>`;
 
         function generateRows() {
-            // 表單 3 (生日禮金) - 12列
+            // 表單 3 (生日禮金)
             let html3 = '';
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<10; i++) {
                 html3 += `
                     <tr style="height: 38px;">
                         <td><input type="text" class="full-width" oninput="updateAmount(this, 600)"></td>
@@ -1081,37 +1088,37 @@
             }
             document.getElementById('f3-tbody').innerHTML = html3;
 
-            // 表單 4 (喪葬補助) - 10列
+            // 表單 4 (喪葬補助) - 縮減列數以防備註框線超出A4邊界
             let html4 = '';
-            for(let i=0; i<10; i++) {
+            for(let i=0; i<8; i++) {
                 html4 += `<tr style="height: 38px;">${tdInp}${tenureInput}${tdInp}${tdInp}${tdInp}${tdInp}</tr>`;
             }
             document.getElementById('f4-tbody').innerHTML = html4;
 
-            // 表單 5 (結婚禮金) - 12列
+            // 表單 5 (結婚禮金) - 縮減列數以防備註框線超出A4邊界
             let html5 = '';
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<9; i++) {
                 html5 += `<tr style="height: 38px;">${tdInp}${tenureInput}${tdInp}${tdInp}${tdInp}</tr>`;
             }
             document.getElementById('f5-tbody').innerHTML = html5;
 
-            // 表單 6 (重大傷病) - 14列
+            // 表單 6 (重大傷病) - 縮減列數以防備註框線超出A4邊界
             let html6 = '';
-            for(let i=0; i<14; i++) {
+            for(let i=0; i<10; i++) {
                 html6 += `<tr style="height: 38px;">${tdInp}${tdInp}${tdInp}${tdInp}${tdInp}</tr>`;
             }
             document.getElementById('f6-tbody').innerHTML = html6;
 
-            // 表單 7 (子女獎學金) - 12列
+            // 表單 7 (子女獎學金)
             let html7 = '';
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<9; i++) {
                 html7 += `<tr style="height: 36px;">${tdInp}${tdInp}${tdInp}${tdInp}${tdInp}${tdInp}${tdInp}${tdInp}</tr>`;
             }
             document.getElementById('f7-tbody').innerHTML = html7;
 
-            // 表單 8 (敬老津貼) - 10列 (有兩列父母合併顯示的感覺，這裡用單列處理，可填多筆)
+            // 表單 8 (敬老津貼)
             let html8 = '';
-            for(let i=0; i<10; i++) {
+            for(let i=0; i<8; i++) {
                 html8 += `<tr style="height: 40px;">
                     ${tdInp}${dateInputYMD}
                     <td><textarea style="width:100%; height:35px; border:none; background:transparent; text-align:center; resize:none;"></textarea></td>
