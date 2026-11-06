@@ -72,7 +72,7 @@
             background-color: #fff;
             width: 210mm;
             height: 297mm;
-            padding: 15mm;
+            padding: 15mm 10mm; /* 左右邊界放寬至 10mm */
             position: relative;
             display: flex;
             flex-direction: column;
@@ -165,7 +165,7 @@
         .sig-box-container {
             width: 100%; 
             height: 100%; 
-            min-height: 70px; 
+            min-height: 60px; /* 統一縮小 */
             display: flex;
         }
         .sig-box {
@@ -179,14 +179,15 @@
             text-align: center; 
             font-weight: bold; 
             border-bottom: 1px solid #000;
-            padding: 8px 0; 
+            padding: 6px 0; 
             background-color: rgba(0,0,0,0.03); 
-            height: 42px; 
-            line-height: 26px;
+            height: 28px; /* 縮小標題列高度 */
+            line-height: 16px;
+            font-size: 14px;
         }
         .sig-content { flex-grow: 1; display: flex; justify-content: center; align-items: center; }
         .sig-input { 
-            width: 90%; height: 90%; text-align: center; font-size: 36px;
+            width: 90%; height: 90%; text-align: center; font-size: 24px; /* 縮小簽名字體 */
             font-weight: bold; background-color: transparent; border: none;
         }
         .sig-input:focus { border-bottom: 1px dashed #333; outline: none; }
@@ -203,7 +204,6 @@
         #form1 .business-group label { display: flex; align-items: center; cursor: pointer; font-weight: normal; }
         #form1 .date-input { display: flex; align-items: baseline; align-self: flex-end; margin-top: 5px; }
         
-        /* 移除 height: 100% 及 flex 延展，讓表格自然縮小 */
         #form1 table { width: 100%; border-collapse: collapse; border: 2px solid #000; table-layout: fixed; z-index: 1; margin-bottom: auto; }
         #form1 th, #form1 td { border: 1px solid #000; padding: 8px; vertical-align: middle; font-size: 16px; }
         .text-center { text-align: center; font-weight: bold; }
@@ -222,7 +222,7 @@
         #form1 .doc-group label { display: flex; align-items: center; cursor: pointer; }
         #form1 .result-row { height: 50px; }
         #form1 .result-group { display: flex; justify-content: center; gap: 50px; font-weight: bold; font-size: 18px; }
-        #form1 .signature-row { height: 90px; }
+        #form1 .signature-row { height: 65px; } /* 固定與 Form 2 相仿的高度 */
 
         /* ======================================================== */
         /* 明細表系列 (表單 2~8) 共用樣式 */
@@ -916,9 +916,9 @@
 
             genRows('tb-form8', 10, `
                 <td><input type="text" class="full-width"></td>
-                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:12.5px;margin:0 -2px;"><input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;">年<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">月<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">日</div></td>
+                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:13px;margin:0;"><input type="text" style="width:28px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">年<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">月<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">日</div></td>
                 <td><input type="text" class="full-width"></td>
-                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:12.5px;margin:0 -2px;"><input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;">年<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">月<input type="text" style="width:18px;text-align:center;border:none;background:transparent;padding:0;">日</div></td>
+                <td><div style="display:flex;justify-content:center;align-items:center;white-space:nowrap;font-size:13px;margin:0;"><input type="text" style="width:28px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">年<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">月<input type="text" style="width:22px;text-align:center;border:none;background:transparent;padding:0;font-size:14px;">日</div></td>
                 <td><input type="text" class="full-width"></td><td><input type="text" class="full-width"></td>
                 <td><input type="text" class="full-width"></td>
             `);
